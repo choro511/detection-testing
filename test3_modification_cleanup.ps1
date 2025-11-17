@@ -1,60 +1,61 @@
-# EDR Test Script 3+4: System Modification and Cleanup
-# 管理者権限で実行されることを前提
+# EDR Test Script 3+4: System Modification and Cleanup (Test Version)
+$testPath = "$env:TEMP\edrtest"
 
 # ディレクトリ作成
 try {
-    New-Item -Path "c:\edrtest" -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
-} catch {}
+    New-Item -Path $testPath -ItemType Directory -Force -ErrorAction SilentlyContinue | Out-Null
+    Write-Host "Directory created: $testPath" -ForegroundColor Green
+} catch {
+    Write-Host "Failed to create directory" -ForegroundColor Red
+}
 
 # 情報収集
+Write-Host "Running system commands..." -ForegroundColor Yellow
 ipconfig /all | Out-Null
 arp -a | Out-Null
 ping misdepatrment.com -n 1 | Out-Null
-wmic useraccount get /ALL | Out-Null
 
-# ユーザー追加
-try {
-    net user sh123 P@ssw0rd /add 2>$null
-} catch {}
-
-# スケジュールタスク作成
+# スケジュールタスク作成（現在のユーザーで）
 try {
     $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-Command ipconfig"
     $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) -RepetitionInterval (New-TimeSpan -Minutes 10) -RepetitionDuration (New-TimeSpan -Days 1)
-    $principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
-    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+    $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
     
-    Register-ScheduledTask -TaskName "edrtest" -Action $action -Trigger $trigger -Principal $principal -Settings $settings -Force -ErrorAction SilentlyContinue | Out-Null
-} catch {}
+    Register-ScheduledTask -TaskName "edrtest" -Action $action -Trigger $trigger -Settings $settings -Force -ErrorAction SilentlyContinue | Out-Null
+    Write-Host "Scheduled task created" -ForegroundColor Green
+} catch {
+    Write-Host "Failed to create scheduled task: $_" -ForegroundColor Red
+}
 
 # ファイルダウンロード
 try {
     $webClient = New-Object System.Net.WebClient
-    $webClient.DownloadFile("https://github.com/choro511/detection-testing/raw/refs/heads/main/calc.exe", "c:\edrtest\calc.exe")
+    $webClient.DownloadFile("https://github.com/choro511/detection-testing/raw/refs/heads/main/calc.exe", "$testPath\calc.exe")
+    Write-Host "File downloaded to $testPath\calc.exe" -ForegroundColor Green
 } catch {
-    # certutilをフォールバック
-    try {
-        certutil -urlcache -split -f "https://github.com/choro511/detection-testing/raw/refs/heads/main/calc.exe" "c:\edrtest\calc.exe" 2>$null | Out-Null
-    } catch {}
+    Write-Host "Failed to download file: $_" -ForegroundColor Red
 }
 
-# 30秒スリープ
-Start-Sleep -Seconds 30
+# 5秒スリープ（テスト用に短縮）
+Write-Host "Sleeping for 5 seconds..." -ForegroundColor Yellow
+Start-Sleep -Seconds 5
 
 # クリーンアップ開始
-if (Test-Path "c:\edrtest") {
+Write-Host "Starting cleanup..." -ForegroundColor Yellow
+if (Test-Path $testPath) {
     try {
-        Get-ChildItem -Path "c:\edrtest" -Recurse | Remove-Item -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path "c:\edrtest" -Force -ErrorAction SilentlyContinue
-    } catch {}
+        Remove-Item -Path $testPath -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Host "Directory deleted" -ForegroundColor Green
+    } catch {
+        Write-Host "Failed to delete directory" -ForegroundColor Red
+    }
 }
 
-# スケジュールタスク削除
 try {
     Unregister-ScheduledTask -TaskName "edrtest" -Confirm:$false -ErrorAction SilentlyContinue | Out-Null
-} catch {}
+    Write-Host "Scheduled task deleted" -ForegroundColor Green
+} catch {
+    Write-Host "Failed to delete scheduled task" -ForegroundColor Red
+}
 
-# ユーザー削除
-try {
-    net user sh123 /delete 2>$null
-} catch {}
+Write-Host "Test completed!" -ForegroundColor Green
